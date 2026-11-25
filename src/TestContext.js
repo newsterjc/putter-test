@@ -6,7 +6,7 @@ import { makeSchedule } from './engine';
 import {
   STATIONS, HEAD_MIN, HEAD_MAX, MAX_MISS, LETTERS, zeroRow, fromLog,
   lettersFor, nameOf, activeLetters, firstOpenStation, normalise, buildTest,
-  unitStep, simulate as simulateLog,
+  unitStep, simulate as simulateLog, analyse,
 } from './logic';
 import { exportCsvFile } from './exportCsv';
 
@@ -27,6 +27,7 @@ const DEFAULT = {
   editing: false,
   pat: 'all',
   patBack: 'setup',
+  simNext: 'winner', // simulate alternates: winner first, then no winner
 };
 
 const Ctx = createContext(null);
@@ -98,10 +99,18 @@ export function TestProvider({ children }) {
     return true;
   };
 
+  // Each press alternates between a winner and no winner. Random runs are retried until one matches.
   const runSimulate = () => {
-    const sim = simulateLog(data);
+    const wantWinner = data.simNext !== 'none';
+    let sim = null;
+    for (let i = 0; i < 2000; i += 1) {
+      sim = simulateLog(data);
+      const v = analyse({ ...data, schedule: sim.schedule, cut: sim.cut }, sim.log).verdict;
+      if (wantWinner ? v === 'winner' : v === 'none') break;
+    }
     setData({
-      ...data, simulated: true, schedule: sim.schedule, log: sim.log, cut: sim.cut,
+      ...data, simulated: true, simNext: wantWinner ? 'none' : 'winner',
+      schedule: sim.schedule, log: sim.log, cut: sim.cut,
       cutAcked: false, st: 1, cur: fromLog(sim.log[1]), editing: false,
     });
   };
@@ -120,19 +129,20 @@ export function TestProvider({ children }) {
   const bump = (letter, field, dir) => {
     const old = data.cur[letter];
     const raw = Math.round((old[field] + dir * unitStep(data.unit)) * 100) / 100;
-    let next;
+    let value = raw;
     if (Math.abs(raw) > MAX_MISS) {
       setPop('maxMiss');
-      next = { ...old, [field]: Math.sign(raw) * MAX_MISS, made: false, touched: true };
-    } else {
-      next = { ...old, [field]: raw, made: false, touched: true };
+      value = Math.sign(raw) * MAX_MISS;
     }
+    const next = { ...old, [field]: value, made: false };
+    // Back at 0 and 0 is not an entry: the putter still needs deliberate data.
+    next.touched = next.lr !== 0 || next.sp !== 0;
     set({ cur: { ...data.cur, [letter]: next } });
   };
 
   const toggleMade = (letter) => {
     const was = data.cur[letter].made;
-    set({ cur: { ...data.cur, [letter]: { lr: 0, sp: 0, made: !was, touched: true } } });
+    set({ cur: { ...data.cur, [letter]: { lr: 0, sp: 0, made: !was, touched: !was } } });
   };
 
   // Returns 'next', 'finished' or 'confirm' (a pop-up is asking first).
