@@ -55,6 +55,7 @@ export default function Setup() {
               <TextInput
                 style={styles.input}
                 value={d.names[p]}
+                placeholder={`Putter ${'ABC'[p]}`}
                 maxLength={10}
                 onChangeText={(v) => t.setName(p, v)}
                 accessibilityLabel={`Putter ${'ABC'[p]} name`}

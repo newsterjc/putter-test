@@ -13,7 +13,7 @@ import { exportCsvFile } from './exportCsv';
 const KEY = 'putter-test:v1';
 
 const DEFAULT = {
-  names: ['Mine', 'Other', 'Third'],
+  names: ['', '', ''],
   putterCount: 2,
   unit: 'heads',
   headLen: null,
@@ -39,8 +39,13 @@ export function TestProvider({ children }) {
   const [toast, setToast] = useState(false);
 
   useEffect(() => {
+    // Setup fields start blank unless a test is in progress, so names and head length are kept only for that.
+    const fresh = (d) => {
+      const inProgress = d.simulated || Object.keys(d.log || {}).length > 0;
+      return inProgress ? d : { ...d, names: ['', '', ''], headLen: null };
+    };
     AsyncStorage.getItem(KEY)
-      .then((raw) => setData(raw ? { ...DEFAULT, ...JSON.parse(raw) } : DEFAULT))
+      .then((raw) => setData(raw ? fresh({ ...DEFAULT, ...JSON.parse(raw) }) : fresh(DEFAULT)))
       .catch(() => setData(DEFAULT));
   }, []);
 
