@@ -41,12 +41,12 @@ export default function Setup() {
 
         <View style={styles.linkRow}>
           <Link label="Click here to simulate data" onPress={() => { t.runSimulate(); setSimShown(true); }} />
+          {simShown && d.simLast ? (
+            <Text style={styles.simNote}>{`Simulated: ${d.simLast === 'winner' ? 'winner' : 'no winner'}`}</Text>
+          ) : null}
           {simShown && d.simulated ? <Link label="See the putting pattern →" onPress={() => { t.goPattern('setup'); router.push('/pattern'); }} /> : null}
           {hasData && !d.simulated ? <Link label="Continue test →" onPress={onContinue} /> : null}
         </View>
-        {simShown && d.simLast ? (
-          <Text style={styles.simNote}>{`Simulated: ${d.simLast === 'winner' ? 'winner' : 'no winner'}`}</Text>
-        ) : null}
 
         <View style={styles.card}>
           {letters.map((letter, p) => (
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   h1: { fontSize: 24, lineHeight: 28, fontWeight: '800', color: C.ink },
   p: { fontSize: 15, lineHeight: 20, color: C.ink },
   simNote: { fontSize: 15, fontWeight: '700', color: C.green },
-  linkRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, alignItems: 'center' },
+  linkRow: { flexDirection: 'column', alignItems: 'flex-start', gap: 8 },
   card: {
     backgroundColor: C.card,
     borderRadius: 16,
