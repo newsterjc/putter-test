@@ -95,7 +95,7 @@ export default function Entry() {
         </View>
       ) : null}
 
-      <View style={styles.cards}>
+      <ScrollView style={styles.cardScroll} contentContainerStyle={styles.cards} showsVerticalScrollIndicator={false}>
         {letters.map((letter) => {
           const p = LETTERS.indexOf(letter);
           const cur = d.cur[letter];
@@ -125,7 +125,7 @@ export default function Entry() {
             </View>
           );
         })}
-      </View>
+      </ScrollView>
 
       <View style={styles.row}>
         <Btn label="Back one station" style={styles.flex} textStyle={styles.bottomText} onPress={onBack} />
@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6, paddingHorizontal: 10,
   },
   warnText: { fontSize: 14, fontWeight: '700', color: C.ink },
-  cards: { flex: 1, flexDirection: 'row', gap: 6, minHeight: 0 },
+  cardScroll: { flex: 1, minHeight: 0 },
+  cards: { flexDirection: 'row', gap: 6, paddingBottom: 4 },
   card: {
     flex: 1, minWidth: 0, backgroundColor: C.card, borderRadius: 16, borderWidth: 1, borderColor: C.line,
     padding: 10, gap: 6,

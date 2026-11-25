@@ -10,7 +10,7 @@ import {
   STATIONS, LETTERS, cellStats, nameOf, analyse, plotScale,
 } from '../src/logic';
 
-const PLOT = 300;
+const PLOT = 260;
 const HALF = PLOT / 2;
 const DOT_COLOUR = { a: C.dotA, b: C.dotB, c: C.dotC };
 
@@ -166,16 +166,16 @@ export default function Pattern() {
             </View>
           ))}
 
-          {cutOn ? <Text style={styles.cap}>{`Putter ${cutName} is out after station 9.`}</Text> : null}
+          {cutOn ? <Text style={styles.cap}>{`Putter ${cutName} was eliminated after Station 9.`}</Text> : null}
 
           {noData ? (
             <Btn label="Fill in simulated results" onPress={t.runSimulate} style={styles.simBtn} textStyle={styles.bottomText} />
           ) : null}
 
           <View style={styles.row}>
-            <Btn label={'Export .csv\n(beta)'} onPress={t.openExport} style={styles.flex} textStyle={styles.smallBtn} />
-            <Btn label="Edit data" onPress={onEdit} style={styles.flex} textStyle={styles.smallBtn} />
-            <Btn label="New test" onPress={onNewTest} style={styles.flex} textStyle={styles.smallBtn} />
+            <Btn label={'Export\n.csv (beta)'} onPress={t.openExport} style={styles.actionBtn} textStyle={styles.smallBtn} />
+            <Btn label={'Edit\ndata'} onPress={onEdit} style={styles.actionBtn} textStyle={styles.smallBtn} />
+            <Btn label={'New\ntest'} onPress={onNewTest} style={styles.actionBtn} textStyle={styles.smallBtn} />
           </View>
         </View>
 
@@ -230,5 +230,6 @@ const styles = StyleSheet.create({
   cellSub: { fontSize: 12, color: C.ink, textAlign: 'center' },
   simBtn: { backgroundColor: C.card, minHeight: 44 },
   bottomText: { fontSize: 15 },
-  smallBtn: { fontSize: 14, minHeight: 44, paddingHorizontal: 6, backgroundColor: C.card },
+  actionBtn: { flex: 1, minHeight: 58, paddingHorizontal: 2, backgroundColor: C.card },
+  smallBtn: { fontSize: 13, lineHeight: 17, textAlign: 'center' },
 });
