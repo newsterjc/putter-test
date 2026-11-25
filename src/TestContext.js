@@ -76,6 +76,8 @@ export function TestProvider({ children }) {
     if (text === '' || text == null) return;
     const v = parseFloat(text);
     if (isNaN(v) || v < HEAD_MIN || v > HEAD_MAX) { setPop('headRange'); return; }
+    // Simulated data depends on head length, so a change clears it rather than leaving a stale cut.
+    if (data.simulated && v !== data.headLen) { setData(resetTest(data, { headLen: v })); return; }
     set({ headLen: v });
   };
 
@@ -103,9 +105,10 @@ export function TestProvider({ children }) {
   const runSimulate = () => {
     const wantWinner = data.simNext !== 'none';
     let sim = null;
+    const headLen = data.unit === 'heads' ? (data.headLen > 0 ? data.headLen : 6) : null;
     for (let i = 0; i < 2000; i += 1) {
       sim = simulateLog(data);
-      const v = analyse({ ...data, schedule: sim.schedule, cut: sim.cut }, sim.log).verdict;
+      const v = analyse({ ...data, headLen, schedule: sim.schedule, cut: sim.cut }, sim.log).verdict;
       if (wantWinner ? v === 'winner' : v === 'none') break;
     }
     setData({

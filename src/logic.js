@@ -161,10 +161,12 @@ export function simulate(setup) {
     letters.forEach((k) => { row[k] = sampleValue(setup.unit); });
     log[i] = row;
   }
-  // The cut is the same in heads or inches (a straight-line rescale), so inches is used here.
+  // The cut must be worked out in the same units and head length the test will use,
+  // or the simulated data drops the wrong putter. Heads fall back to 6 in if none is entered yet.
   let cut = null;
   if (setup.putterCount === 3) {
-    const t = buildTest({ ...setup, unit: 'inches', headLen: null, schedule, cut: null }, log);
+    const headLen = setup.unit === 'heads' ? (setup.headLen > 0 ? setup.headLen : 6) : null;
+    const t = buildTest({ ...setup, headLen, schedule, cut: null }, log);
     cut = t && t.cuts[0] ? LETTERS[t.cuts[0].cutIdx] : null;
   }
   for (let i = 10; i <= STATIONS; i++) {
