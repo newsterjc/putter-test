@@ -132,7 +132,7 @@ export default function Entry() {
         <Btn primary label={saveLabel} style={[styles.flex, styles.saveBtn]} textStyle={styles.bottomText} onPress={onSave} />
       </View>
 
-      <Pops keys={['editConfirm', 'cut', 'maxMiss']} />
+      <Pops keys={['editConfirm', 'cut', 'maxMiss', 'noData']} />
 
       <Modal transparent animationType="slide" visible={help} onRequestClose={() => setHelp(false)}>
         <View style={styles.helpOverlay}>

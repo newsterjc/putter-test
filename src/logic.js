@@ -10,15 +10,13 @@ export const HEAD_MIN = 4;
 export const HEAD_MAX = 8;
 export const CUP_IN = 2.125;
 
-export const blank = () => ({ lr: 0, sp: 0, made: false });
+// `touched` is false until the putter has a click or saved data, so an untouched hole can be caught on Save.
+export const blank = () => ({ lr: 0, sp: 0, made: false, touched: false });
 export const zeroRow = () => ({ a: blank(), b: blank(), c: blank() });
 export const fromLog = (row) => {
   const src = row || {};
-  return {
-    a: src.a ? { ...src.a } : blank(),
-    b: src.b ? { ...src.b } : blank(),
-    c: src.c ? { ...src.c } : blank(),
-  };
+  const take = (e) => (e ? { ...e, touched: true } : blank());
+  return { a: take(src.a), b: take(src.b), c: take(src.c) };
 };
 
 export function lettersFor(count) {

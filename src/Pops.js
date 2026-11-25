@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { useTest } from './TestContext';
 import { Btn } from './ui';
 import { C } from './theme';
-import { LETTERS, nameOf } from './logic';
+import { LETTERS, nameOf, activeLetters } from './logic';
 
 // Shows only the pop-ups listed in `keys` for this screen. Wording matches the approved mockup.
 export default function Pops({ keys }) {
@@ -37,6 +37,11 @@ export default function Pops({ keys }) {
     case 'maxMiss':
       body = okOnly('15 is the max miss');
       break;
+    case 'noData': {
+      const miss = activeLetters(d, d.st).find((k) => !d.cur[k].touched);
+      body = okOnly(`Data not entered for putter ${miss ? nameOf(d, LETTERS.indexOf(miss)) : ''}`);
+      break;
+    }
     case 'cut': {
       const name = nameOf(d, LETTERS.indexOf(d.cut));
       body = (

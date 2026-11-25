@@ -69,7 +69,7 @@ export default function Setup() {
                 value={headText}
                 placeholder="4 to 8"
                 keyboardType="decimal-pad"
-                onChangeText={setHeadText}
+                onChangeText={(v) => setHeadText(v.match(/^\d*(\.\d{0,2})?/)[0])}
                 onBlur={() => t.checkHeadLength(headText)}
                 accessibilityLabel="Measuring head length in inches"
               />

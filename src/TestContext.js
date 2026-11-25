@@ -123,16 +123,16 @@ export function TestProvider({ children }) {
     let next;
     if (Math.abs(raw) > MAX_MISS) {
       setPop('maxMiss');
-      next = { ...old, [field]: Math.sign(raw) * MAX_MISS, made: false };
+      next = { ...old, [field]: Math.sign(raw) * MAX_MISS, made: false, touched: true };
     } else {
-      next = { ...old, [field]: raw, made: false };
+      next = { ...old, [field]: raw, made: false, touched: true };
     }
     set({ cur: { ...data.cur, [letter]: next } });
   };
 
   const toggleMade = (letter) => {
     const was = data.cur[letter].made;
-    set({ cur: { ...data.cur, [letter]: { lr: 0, sp: 0, made: !was } } });
+    set({ cur: { ...data.cur, [letter]: { lr: 0, sp: 0, made: !was, touched: true } } });
   };
 
   // Returns 'next', 'finished' or 'confirm' (a pop-up is asking first).
@@ -176,6 +176,8 @@ export function TestProvider({ children }) {
   };
 
   const save = () => {
+    const untouched = activeLetters(data, data.st).some((k) => !data.cur[k].touched);
+    if (untouched) { setPop('noData'); return 'blocked'; }
     const later = Object.keys(data.log).some((k) => Number(k) > 9);
     if (data.putterCount === 3 && data.st <= 9 && later) { setPop('editConfirm'); return 'confirm'; }
     return doSave();
@@ -210,6 +212,7 @@ export function TestProvider({ children }) {
     setPat: (pat) => set({ pat }),
     goPattern, editData, hasData,
     closePop: () => setPop(null),
+    cancelPop: () => setPop(null),
     openExport: () => setPop('export'),
     confirmExport,
   };
