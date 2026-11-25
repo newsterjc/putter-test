@@ -14,6 +14,8 @@ export default function Setup() {
   const { d } = t;
   const insets = useSafeAreaInsets();
   const [showAdv, setShowAdv] = useState(false);
+  // Only show the pattern link after Simulate is pressed on this screen, not from saved data.
+  const [simShown, setSimShown] = useState(false);
   const [headText, setHeadText] = useState(d.headLen ? String(d.headLen) : '');
 
   const count = d.putterCount;
@@ -38,8 +40,8 @@ export default function Setup() {
         <Text style={styles.p}>Each putter gets a letter.</Text>
 
         <View style={styles.linkRow}>
-          <Link label="Click here to simulate data" onPress={t.runSimulate} />
-          {d.simulated ? <Link label="See the putting pattern →" onPress={() => { t.goPattern('setup'); router.push('/pattern'); }} /> : null}
+          <Link label="Click here to simulate data" onPress={() => { t.runSimulate(); setSimShown(true); }} />
+          {simShown && d.simulated ? <Link label="See the putting pattern →" onPress={() => { t.goPattern('setup'); router.push('/pattern'); }} /> : null}
           {hasData && !d.simulated ? <Link label="Continue test →" onPress={onContinue} /> : null}
         </View>
 

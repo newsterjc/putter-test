@@ -72,7 +72,7 @@ export default function Entry() {
         {d.simulated ? `${doneCount} of ${STATIONS} simulated` : `${doneCount} of ${STATIONS} saved on this phone`}
       </Text>
 
-      <ScrollView ref={stripRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.strip}>
+      <ScrollView ref={stripRef} horizontal style={styles.stripScroll} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.strip}>
         {Array.from({ length: STATIONS }, (_, k) => k + 1).map((i) => (
           <Chip
             key={i}
@@ -182,6 +182,8 @@ const styles = StyleSheet.create({
   helpText: { fontSize: 15 },
   track: { height: 10, backgroundColor: C.track, borderRadius: 6, overflow: 'hidden' },
   fill: { height: 10, backgroundColor: C.green },
+  // The strip must not grow: a horizontal ScrollView otherwise takes half the screen and pushes the cards down.
+  stripScroll: { flexGrow: 0, flexShrink: 0 },
   strip: { gap: 4, paddingVertical: 2 },
   stripChip: { width: 42, minWidth: 42, paddingHorizontal: 0 },
   note: { backgroundColor: C.note, borderRadius: 12, paddingVertical: 6, paddingHorizontal: 10 },
