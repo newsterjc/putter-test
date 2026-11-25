@@ -37,11 +37,9 @@ export default function Pops({ keys }) {
     case 'maxMiss':
       body = okOnly('15 is the max miss');
       break;
-    case 'noData': {
-      const miss = activeLetters(d, d.st).find((k) => !d.cur[k].touched);
-      body = okOnly(`Data not entered for putter ${miss ? nameOf(d, LETTERS.indexOf(miss)) : ''}`);
+    case 'noData':
+      body = okOnly('Data entry incomplete.');
       break;
-    }
     case 'cut': {
       const name = nameOf(d, LETTERS.indexOf(d.cut));
       body = (
