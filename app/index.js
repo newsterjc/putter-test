@@ -41,12 +41,12 @@ export default function Setup() {
 
         <View style={styles.linkRow}>
           <Link label="Click here to simulate data" onPress={() => { t.runSimulate(); setSimShown(true); }} />
-          {simShown && d.simLast ? (
-            <Text style={styles.simNote}>{`Simulated: ${d.simLast === 'winner' ? 'winner' : 'no winner'}`}</Text>
-          ) : null}
           {simShown && d.simulated ? <Link label="See the putting pattern →" onPress={() => { t.goPattern('setup'); router.push('/pattern'); }} /> : null}
           {hasData && !d.simulated ? <Link label="Continue test →" onPress={onContinue} /> : null}
         </View>
+        {simShown && d.simLast ? (
+          <Text style={styles.simNote}>{`Simulated: ${d.simLast === 'winner' ? 'winner' : 'no winner'}`}</Text>
+        ) : null}
 
         <View style={styles.card}>
           {letters.map((letter, p) => (
