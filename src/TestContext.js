@@ -28,6 +28,7 @@ const DEFAULT = {
   pat: 'all',
   patBack: 'setup',
   simNext: 'winner', // simulate alternates: winner first, then no winner
+  simLast: null,     // result of the most recent simulate press, shown on the setup screen
 };
 
 const Ctx = createContext(null);
@@ -41,7 +42,7 @@ export function TestProvider({ children }) {
   useEffect(() => {
     // Setup fields start blank unless a test is in progress, so names and head length are kept only for that.
     const fresh = (d) => {
-      const inProgress = d.simulated || Object.keys(d.log || {}).length > 0;
+      const inProgress = !d.simulated && Object.keys(d.log || {}).length > 0;
       return inProgress ? d : { ...d, names: ['', '', ''], headLen: null };
     };
     AsyncStorage.getItem(KEY)
@@ -117,7 +118,7 @@ export function TestProvider({ children }) {
       if (wantWinner ? v === 'winner' : v === 'none') break;
     }
     setData({
-      ...data, simulated: true, simNext: wantWinner ? 'none' : 'winner',
+      ...data, simulated: true, simNext: wantWinner ? 'none' : 'winner', simLast: wantWinner ? 'winner' : 'none',
       schedule: sim.schedule, log: sim.log, cut: sim.cut,
       cutAcked: false, st: 1, cur: fromLog(sim.log[1]), editing: false,
     });

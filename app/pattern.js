@@ -10,7 +10,7 @@ import {
   STATIONS, LETTERS, cellStats, nameOf, analyse, plotScale,
 } from '../src/logic';
 
-const PLOT = 230;
+const PLOT = 210;
 const HALF = PLOT / 2;
 const DOT_COLOUR = { a: C.dotA, b: C.dotB, c: C.dotC };
 
